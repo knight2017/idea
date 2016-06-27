@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ideas</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <a href="/">HOME</a> |
+     <a href="/ideas">Blogs</a> |
+
+     <% if session[:user_id] %>
+     <a href="/ideas/new">Create a new blog</a> |
+      Hello! <%= link_to "Joined ideas", joins_path %>
+      <%= link_to "#{current_user.first_name}", user_path(current_user) %>
+     <%= link_to "sign out", sessions_path, method: :delete %>
+     <% else %>
+      <a href="/users/new"> Sign Up</a>
+     <%= link_to "Sign In", new_session_path %>
+     <% end %>
+    <hr>
+
+    <% if flash[:notice] %>
+    <div class="flash-notice"><%= flash[:notice] %></div>
+    <% elsif flash[:alert] %>
+    <div class="flash-alert"><%= flash[:alert] %></div>
+    <% end %>
+   </nav>
+
+<%= yield %>
+
+</body>
+</html>

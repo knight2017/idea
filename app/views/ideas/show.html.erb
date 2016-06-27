@@ -1,0 +1,26 @@
+<h2>Selected Blog</h2>
+<h1><%= @idea.title %></h1>
+<h2><%= @idea.body %></h2>
+<p>Created By: <%= @idea.user.full_name if @idea.user %></p>
+<% if user_signed_in? %>
+<%= @comment.errors.full_messages.join(", ") %> <br>
+  <%= form_for [@idea, @comment] do |f| %>
+     <h3>commnets</h3>
+     <%= f.text_area :body %>
+     <br>
+     <%= f.submit %>
+  <% end %>
+<% end %>
+  <h2>Comments</h2>
+  <div>
+
+  <% @idea.comments.each do |comment| %>
+    <%= comment.body %>
+    <p>By: <%= comment.user.full_name if comment.user %></p>
+    <% if can? :manage, comment || current_user = @idea.user%>
+    <%= link_to "Delete", idea_comment_path(@idea, comment),
+                          method: :delete,
+                          data: {confirm: "Are you sure?"} %>
+    <% end %>
+    <hr>
+<% end %>

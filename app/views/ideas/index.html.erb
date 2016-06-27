@@ -1,0 +1,36 @@
+
+
+<% @ideas.each do |idea| %>
+  <%= link_to idea.title, idea_path(idea) %>| <br>
+  <%= idea.body %> <br>
+  By <%= idea&.user.first_name if idea&.user %>|
+
+
+  <% if user_signed_in? && current_user != idea.user  %>
+      <% if idea.joined_by?(current_user) %>
+        <%= link_to "Joined", idea_join_path(idea, idea.join_for(current_user)), method: :delete  %>
+      <% else %>
+        <%= link_to "Join", idea_joins_path(idea), method: :post %>
+      <% end %>
+
+      <% if idea.liked_by?(current_user) %>
+        <%= link_to "liked", idea_like_path(idea, idea.like_for(current_user)), method: :delete  %>
+      <% else %>
+        <%= link_to "like", idea_likes_path(idea), method: :post %>
+      <% end %>
+  <% end %>
+  
+  <% if can? :manage, idea%>
+  <%= link_to "Edit", edit_idea_path( idea) %>
+  <%= link_to "Delete", idea_path(idea),
+                          method: :delete,
+                          data: {confirm: "Are you sure?"} %> <br>
+  <% end %>
+  <br>
+
+    Members:<%= idea.joined_users.length %>|
+    Likes: <%= idea.likes.length%>
+
+  <hr>
+
+<% end %>
